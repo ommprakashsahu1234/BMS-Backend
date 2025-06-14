@@ -17,7 +17,7 @@ const Transaction = require('./models/Transactions')
 const Notification = require('./models/Notifications')
 const BranchDetail = require('./models/BranchDetail')
 
-const conn = require('./conn/conn')
+// const conn = require('./conn/conn')
 const authenticateToken = require('./middleware/auth');
 const jwt = require('jsonwebtoken')
 
@@ -1398,6 +1398,10 @@ app.get("/branchmanager/accountholderdetails/:accountNumber", verifyToken, async
 
 
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+const connectToDB = require('./conn/conn');
+
+connectToDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
 });
