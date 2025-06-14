@@ -1,12 +1,19 @@
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
 
-dotenv.config(); 
+const connectToDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 20000
+    });
+    console.log("✅ MongoDB Connected");
+  } catch (err) {
+    console.error("❌ MongoDB Connection Error:", err.message);
+    process.exit(1); // Stop the server if DB fails
+  }
+};
 
-const conn  = mongoose.connect(process.env.MONGO_URI).then(() => {
-  console.log("Database Connected.");
-}).catch((err)=>{
-    console.log('No Connection')
-})
-
-module.exports = conn
+module.exports = connectToDB;
